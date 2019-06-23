@@ -1,10 +1,10 @@
 <?php
 /* --------------------------------------------------------------------------------------------
  * remove the underscore (_) between Template & Name (line 7) to activate PAGE ARCHIVE template
- * or from Template_Name to Template Name | Change to your template name
+ * or from Template_Name to Template Name
  * ----------------------------------------------------------------------------------------- */
 /**
- * Template Name: Jakers
+ * Template_Name: Change to your template name
  * Description: Change description to what you like
  */
 
