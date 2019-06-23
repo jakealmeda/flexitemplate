@@ -1,8 +1,10 @@
 <?php
 /* --------------------------------------------------------------------------------------------
  * remove the underscore (_) between Template & Name (line 7) to activate PAGE ARCHIVE template
- * or from Template_Name to Template Name
- * ALSO don't forget to rename the name of this file to something like archive-video.php
+ * from Template_Name to Template Name
+ * 				- OR -
+ * Leave the Template_Name (with the underscore) as is and rename the name of this file
+ * to something like archive-video.php for GLOBAL ARCHIVE template
  * ----------------------------------------------------------------------------------------- */
 /**
  * Template_Name: Change to your template name
