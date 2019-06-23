@@ -1,0 +1,34 @@
+ID: get_the_ID()
+
+TITLE: get_the_title()
+
+SLUG: two ways of getting the slug (https://stackoverflow.com/questions/33842251/how-to-get-post-slug-from-post-in-wordpress)
+	- in the loop
+		global $post;
+		echo $post->post_name;
+
+	or
+
+	- outside of the loop
+		$post_id = 45; //specify post id here
+		$post = get_post( $post_id ); 
+		$slug = $post->post_name;
+
+EXCERPT: get the excerpt()
+
+CATEGORY: get_the_category()
+
+TAGS: get_the_tags()
+
+IMAGES:
+	- get_the_post_thumbnail() | https://developer.wordpress.org/reference/functions/get_the_post_thumbnail/
+	- wp_get_attachment_image( field_name, $size = "thumbnail", $icon = false )
+
+AUTHOR: get_the_author()
+
+POST DATE: get_the_date()
+
+PERMALINK: get_the_permalink()
+
+CUSTOM FIELD: get_post_meta( get_the_ID(), field_name, TRUE ) 
+	- note: last argument is TRUE which returns only the first value for the specified meta key

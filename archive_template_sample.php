@@ -2,6 +2,7 @@
 /* --------------------------------------------------------------------------------------------
  * remove the underscore (_) between Template & Name (line 7) to activate PAGE ARCHIVE template
  * or from Template_Name to Template Name
+ * ALSO don't forget to rename the name of this file to something like archive-video.php
  * ----------------------------------------------------------------------------------------- */
 /**
  * Template_Name: Change to your template name
@@ -9,20 +10,30 @@
  */
 
 
-// Do not edit the next 3 lines
+/* --------------------------------------------------------------------------------------------
+ * Do not edit the next 3 lines
+ * ----------------------------------------------------------------------------------------- */
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
 
-// Do not edit the next lines, it's where the WP_Query command is processed
+/* --------------------------------------------------------------------------------------------
+ * Do not edit the next lines, it's where the WP_Query command is processed
+ * ----------------------------------------------------------------------------------------- */
 include_once( 'swp_template/swp_wp_query.php' );
 include_once( 'swp_template/swp_query_entries.php' );
 
 
 /* --------------------------------------------------------------------------------------------
+ * Add remove_actions here
+ * ----------------------------------------------------------------------------------------- */
+//remove_action( 'genesis_after_endwhile', 'genesis_posts_nav' );
+
+
+/* --------------------------------------------------------------------------------------------
  * Main Class
- * This name should be unique - rename the class names in the next two lines
+ * The Class name should be unique - rename the class names in the next two lines
  * ----------------------------------------------------------------------------------------- */
 $a = new SWPTemplateSample();
 class SWPTemplateSample {
@@ -30,6 +41,7 @@ class SWPTemplateSample {
 	// sample template function
 	public function swp_video_archive_function() {
 
+		// do not edit the next line
 		$b = new SWP_QueryEntries();
 
 		/*
@@ -41,6 +53,8 @@ class SWPTemplateSample {
 			$tax_name 		= 'category';
 			$tax_term		= 'official-video'; // category slug
 		*/
+
+		// pagination
 		$paged1 = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 		$post_type 			= 'video';
@@ -50,20 +64,21 @@ class SWPTemplateSample {
 		$posts_per_page 	= 8; // will default to "Blog pages show at most" if no value is declared | -1 to show all
 		$paged				= $paged1;
 		$orderbymeta		= ''; // specify custom field to be ordered by
-		$orderby			= ''; // 
+		$orderby			= ''; // order by what field
 		$order				= ''; // ASC or DESC
 
+		// opening container tag here
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template );
+		// closing container tag here
 
 	}
-
 
 	// CONSTRUCT
 	public function __construct() {
 
 		if( !is_admin() ) {
 
-			// DISPLAY VIDEO
+			// DISPLAY IN CONTENT AREA
 			add_action( 'genesis_entry_content', array( $this, 'swp_video_archive_function' ) );
 
 		}
@@ -73,4 +88,7 @@ class SWPTemplateSample {
 }
 
 
+/* --------------------------------------------------------------------------------------------
+ * Do not remove the last line | call genesis
+ * ----------------------------------------------------------------------------------------- */
 genesis();
