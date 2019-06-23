@@ -66,7 +66,7 @@ class SWPTemplateSample {
 		$orderbymeta		= ''; // specify custom field to be ordered by
 		$orderby			= ''; // order by what field (default is date)
 		$order				= ''; // ASC or DESC (default is DESC)
-		$pagination_temp	= 1; // choose from 1, 2 & 3
+		$pagination_temp	= 1; // choose from 1, 2 & 3 (any other value will hide the page nav)
 
 		// opening container tag here
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp );
