@@ -34,9 +34,9 @@ class SWP_QueryEntries {
 
 		// The Loop
 		if ( $wp_query->have_posts() ) {
-			
+/*			
 			?><div id="module-container"><?php
-
+*/
 			while( $wp_query->have_posts() ): $wp_query->the_post(); //global $post;
 				
 				// call template
