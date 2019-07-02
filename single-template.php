@@ -1,16 +1,5 @@
 <?php
 /* --------------------------------------------------------------------------------------------
- * remove the underscore (_) between Template & Name (line 7) to activate PAGE ARCHIVE template
- * or from Template_Name to Template Name
- * ALSO don't forget to rename the name of this file to something like archive-video.php
- * ----------------------------------------------------------------------------------------- */
-/**
- * Template_Name: Change to desired name
- * Description: Change description to what you like
- */
-
-
-/* --------------------------------------------------------------------------------------------
  * Do not edit the next 3 lines
  * ----------------------------------------------------------------------------------------- */
 if ( ! defined( 'ABSPATH' ) ) {
@@ -37,38 +26,60 @@ include_once( 'swp_template/swp_query_entries.php' );
  * ----------------------------------------------------------------------------------------- */
 $a = new SWPTemplateSample();
 class SWPTemplateSample {
-
-	// sample template function
-	public function swp_video_archive_function() {
+	
+	// NEXT
+	public function swp_next() {
 
 		// do not edit the next line
 		$b = new SWP_QueryEntries();
 
-		/*
-			// Taxonomy guide
-			// ---------------------------------------------------------------- TAGS
-			$tax_name 		= 'post_tag'; 
-			$tax_term		= 'mtv'; // tag slug
-			// ------------------------------------------------------------ CATEGORY
-			$tax_name 		= 'category';
-			$tax_term		= 'official-video'; // category slug
-		*/
+		$post_type 			= 'video';
+		$template 			= 'single_sample_template.php'; // will default to pre-coded sample_template.php if no value is declared
+		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
+		$current_post_id 	= get_the_ID();
 
-		// pagination
-		//$paged1 = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-		//$paged1 = isset( $_GET['paged'] ) ? (int) $_GET['paged'] : 1;
+		// WHAT TO SHOW
+		$show = "next";
+
+		// opening container tag here
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $current_post_id, $show, $pagination_temp, $pagination_count );
+		// closing container tag here
+
+	}
+	
+	// PREVIOUS
+	public function swp_prev() {
+
+		// do not edit the next line
+		$b = new SWP_QueryEntries();
 
 		$post_type 			= 'video';
-		$template 			= 'sample_template.php'; // will default to pre-coded sample_template.php if no value is declared
-		$tax_name 			= '';
-		$tax_term			= '';
+		$template 			= 'single_sample_template.php'; // will default to pre-coded sample_template.php if no value is declared
 		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
-		$paged				= $paged1;
-		$orderbymeta		= ''; // specify custom field to be ordered by
-		$orderby			= ''; // order by what field (default is date)
-		$order				= ''; // ASC or DESC (default is DESC)
-		$pagination_temp	= ''; // choose from 1, 2 & 3 (any other value will hide the page nav)
-		$pagination_count	= 1;
+		$current_post_id 	= get_the_ID();
+
+		// WHAT TO SHOW
+		$show = "previous";
+
+		// opening container tag here
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $current_post_id, $show, $pagination_temp, $pagination_count );
+		// closing container tag here
+
+	}
+	
+	// BOTH
+	public function swp_both() {
+
+		// do not edit the next line
+		$b = new SWP_QueryEntries();
+
+		$post_type 			= 'video';
+		$template 			= 'single_sample_template.php'; // will default to pre-coded sample_template.php if no value is declared
+		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
+		$current_post_id 	= get_the_ID();
+
+		// WHAT TO SHOW
+		$show = "both";
 
 		// opening container tag here
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $current_post_id, $show, $pagination_temp, $pagination_count );
@@ -80,10 +91,9 @@ class SWPTemplateSample {
 	public function __construct() {
 
 		if( !is_admin() ) {
-
-			// DISPLAY IN CONTENT AREA
-			add_action( 'genesis_entry_content', array( $this, 'swp_video_archive_function' ) );
-
+			add_action( 'genesis_before_sidebar_widget_area', array( $this, 'swp_next' ) );
+			add_action( 'genesis_entry_content', array( $this, 'swp_prev' ) );
+			//add_action( 'genesis_entry_content', array( $this, 'swp_both' ) );
 		}
 
 	}

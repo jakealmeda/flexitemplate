@@ -11,15 +11,17 @@ include_once( 'swp_wp_query.php' );
 class SWP_QueryEntries {
 
 	// DISPLAY TEMPLATE
-	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp ) {
+	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $current_post_id, $echo_this, $pagination_temp, $pagination_count ) {
 		
-		global $wp_query;
+		global $wp_query, $use_this_id;
 
 		$x = new SWP_WPQueryPosts();
-
+		//echo '<h1>'.$paged.'</h1>';
 		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order );
 		
 		//global $max_page = $wp_query->max_num_pages;
+
+		$h = 1; // set counter for next, previous and all displays
 
 		// check if template is declared
 		if( $template && $template != 'template' ) {
@@ -39,8 +41,53 @@ class SWP_QueryEntries {
 */
 			while( $wp_query->have_posts() ): $wp_query->the_post(); //global $post;
 				
-				// call template
-				echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+				if( $echo_this ) {
+					// -------------------------------------------------
+					//$out_prev = ''; $out_next = '';
+					
+					// catch current post and display previous post details
+					if( $current_post_id == get_the_ID() ) {
+
+						// show Previous pane if NOT the first article
+						if( $h > 1 ) {
+
+							// show pane if called
+							if( $echo_this == 'previous' || $echo_this == 'both' ) {
+								$use_this_id = $previous_id;
+								echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+							}
+
+						}
+
+						// mark the NEXT article based on the loop ($h)
+						$the_next_post = $h + 1;
+
+					}
+					
+					// catch previous entry
+					$previous_id = get_the_ID();
+
+					// get next entry | can be found in loop $h + 1
+					if( $h == $the_next_post ) {
+
+						// surprisingly this pane doesn't show if the current post is the last one - hooray!
+
+						if( $echo_this == 'next' || $echo_this == 'both' ) {
+							$use_this_id = get_the_ID();
+							echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+						}
+
+						// no need to continue with the loop
+						break;
+					}
+					
+					// increment
+					$h++;
+					// -------------------------------------------------
+				} else {
+					// call template
+					echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+				}
 				
 			endwhile;
 /*
@@ -68,6 +115,18 @@ class SWP_QueryEntries {
 				    'prev_text' => __( '<<', 'textdomain' ),
 				    'next_text' => __( '>>', 'textdomain' ),
 				) );
+			}
+
+			if( $pagination_temp == 4 ) {
+				echo '<h2>'.$paged.'</h2>';
+	            // Class Reference/WP Query
+	            $pag_args1 = array(
+	                'format'  => '?paged=%#%',
+	                'current' => $paged,
+	                'total'   => $wp_query->max_num_pages,
+	                'add_args' => array( 'paged2' => $paged2 )
+	            );
+	            echo paginate_links( $pag_args1 );
 			}
 			/* PAGINATION END
 			 * ---------------------------------------------------------------------------- */
