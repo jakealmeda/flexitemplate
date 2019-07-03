@@ -71,7 +71,7 @@ class SWPTemplateSample {
 		$pagination_count	= 1;
 
 		// opening container tag here
-		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $echo_this );
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
 		// closing container tag here
 		
 	}
