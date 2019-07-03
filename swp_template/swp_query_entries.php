@@ -11,7 +11,7 @@ include_once( 'swp_wp_query.php' );
 class SWP_QueryEntries {
 
 	// DISPLAY TEMPLATE
-	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $current_post_id, $echo_this, $pagination_temp, $pagination_count ) {
+	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $echo_this ) {
 		
 		global $wp_query, $use_this_id;
 
