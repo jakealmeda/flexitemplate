@@ -70,9 +70,13 @@ class SWPTemplateSample {
 		$pagination_temp	= ''; // choose from 1, 2 & 3 (any other value will hide the page nav)
 		$pagination_count	= 1;
 
-		// opening container tag here
-		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-		// closing container tag here
+		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+
+		if( $out ) {
+			// opening container tag here
+			echo $out;
+			// closing container tag here
+		}
 		
 	}
 

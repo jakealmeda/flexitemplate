@@ -40,8 +40,10 @@ class SWP_QueryEntries {
 */
 			while( $wp_query->have_posts() ): $wp_query->the_post(); //global $post;
 				
-				if( $show ) {
-					// -------------------------------------------------
+				// navigator (Prev, Next, Both)
+				if( in_array( $show, array( 'previous', 'next', 'both' ) ) ) {
+                    // $show contains texts either NEXT, PREVIOUS or BOTH
+                    
 					//$out_prev = ''; $out_next = '';
 					
 					// catch current post and display previous post details
@@ -80,10 +82,23 @@ class SWP_QueryEntries {
 						break;
 					}
 					
-					// increment
-					$h++;
-					// -------------------------------------------------
-				} else {
+					$h++; // increment
+					
+					$checker++; // add value to variable
+
+				} // if( in_array( $show, array( 'previous', 'next', 'both' ) ) ) {
+
+
+				// succeeding post entries
+				if( ! $chcker && $show ) {
+					
+
+					$checker++; // add value to variable
+				}
+
+
+				// validate variable, if false, the calling template is archive
+				if( ! $checker ) {
 					// call template
 					echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
 				}
