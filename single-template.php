@@ -41,13 +41,13 @@ class SWPTemplateSample {
 		// WHAT TO SHOW
 		$show = "next";
 
-		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-
-		if( $out ) {
+/*		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+		// validate $out if has contents and hide container if empty
+		if( $out ) {*/
 			// opening container tag here
-			echo $out;
+			echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
 			// closing container tag here
-		}
+//		}
 
 	}
 	
@@ -65,13 +65,13 @@ class SWPTemplateSample {
 		// WHAT TO SHOW
 		$show = "previous";
 
-		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-
-		if( $out ) {
+/*		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+		// validate $out if has contents and hide container if empty
+		if( $out ) {*/
 			// opening container tag here
-			echo $out;
+			echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
 			// closing container tag here
-		}
+//		}
 
 	}
 	
@@ -89,14 +89,81 @@ class SWPTemplateSample {
 		// WHAT TO SHOW
 		$show = "both";
 
-		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-
-		if( $out ) {
+/*		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+		// validate $out if has contents and hide container if empty
+		if( $out ) {*/
 			// opening container tag here
-			echo $out;
+			echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
 			// closing container tag here
-		}
+//		}
 		
+	}
+
+	// GRID
+	public function swp_grid() {
+
+		// do not edit the next line
+		$b = new SWP_QueryEntries();
+
+		$post_type 			= 'video';
+		$template 			= 'single_sample_template.php'; // will default to pre-coded sample_template.php if no value is declared
+		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
+		//$paged				= $paged1;
+		//$pagination_temp	= ''; // choose from 1, 2 & 3 (any other value will hide the page nav)
+		//$pagination_count	= 1;
+
+		// WHAT TO SHOW
+		$show = "6";
+		$current_post_id 	= get_the_ID();
+
+/*		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+		// validate $out if has contents and hide container if empty
+		if( $out ) {*/
+	        echo '<div id="section-podcast-entry-related" class="group archive-grid archive-grid-podcast section-podcast-entry-related">';
+    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+    		echo '</div>';
+//		}
+
+	}
+
+	// ORDER BY META VALUE
+	public function swp_order_by_metavalue() {
+        
+		// do not edit the next line
+		$b = new SWP_QueryEntries();
+        
+		$post_type 			= 'video';
+		$template 			= 'mediaobject-horizontal.php'; // will default to pre-coded sample_template.php if no value is declared
+		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
+		//$orderbymeta        = 'meta_value';
+		//$paged				= $paged1;
+		//$pagination_temp	= ''; // choose from 1, 2 & 3 (any other value will hide the page nav)
+		//$pagination_count	= 1;
+        
+		// WHAT TO SHOW
+		$show = "meta";
+		$current_post_id 	= get_the_ID();
+        
+        // IMAGE
+        $swp_field = get_post_meta( get_the_ID(), "series", TRUE );
+        if ( $swp_field ) {
+            
+            // set custom field query
+            $meta_query = array(
+                    array(
+                        'key'     => 'series',
+                        'value'   => $swp_field,
+                        'compare' => '=',
+                    ),
+                );
+        
+    		echo '<div class="feature-pretitle">ORDER BY CUSTOM FIELD</div>';
+    		echo '<div class="grid-feature grid-2col feature-related">';
+    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+    		echo '</div>';
+    		
+		}
+
 	}
 
 	// CONSTRUCT
@@ -106,6 +173,8 @@ class SWPTemplateSample {
 			add_action( 'genesis_before_sidebar_widget_area', array( $this, 'swp_next' ) );
 			add_action( 'genesis_entry_content', array( $this, 'swp_prev' ) );
 			//add_action( 'genesis_entry_content', array( $this, 'swp_both' ) );
+			add_action( 'genesis_entry_content', array( $this, 'swp_grid' ) );
+			add_action( 'genesis_entry_content', array( $this, 'swp_order_by_metavalue' ) );
 		}
 
 	}

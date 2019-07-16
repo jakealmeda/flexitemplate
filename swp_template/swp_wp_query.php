@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SWP_WPQueryPosts {
 	
-	public function swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order ) {
+	public function swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order ) {
 
 		// sort
 		if( is_null( $orderby ) ) {
@@ -39,6 +39,7 @@ class SWP_WPQueryPosts {
 			'post_status'    	=> 'publish',
 			'posts_per_page' 	=> $posts_per_page,
 			'paged' 			=> $paged,
+			'meta_query'		=> $meta_query,
 			'meta_key'			=> $orderbymeta,
 			'orderby'			=> $orderby,
 			'order'				=> $order,

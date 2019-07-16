@@ -11,12 +11,12 @@ include_once( 'swp_wp_query.php' );
 class SWP_QueryEntries {
 
 	// DISPLAY TEMPLATE
-	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show ) {
+	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show ) {
 		
 		global $wp_query, $use_this_id;
 
 		$x = new SWP_WPQueryPosts();
-		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order );
+		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order );
 		
 		//global $max_page = $wp_query->max_num_pages;
         
@@ -38,20 +38,13 @@ class SWP_QueryEntries {
 /*			
 			?><div id="module-container"><?php
 */
-			$checker = "";
-
-			// unset arrays
-			$this->swp_unset_array( $past );
-			$this->swp_unset_array( $future );
-
-			// loop
 			while( $wp_query->have_posts() ): $wp_query->the_post(); //global $post;
 				
-				$use_this_id = ''; // reset variable so as not to affect the next loop
-
 				// navigator (Prev, Next, Both)
 				if( in_array( $show, array( 'previous', 'next', 'both' ) ) ) {
 
+					// $show contains texts either NEXT, PREVIOUS or BOTH
+					// -------------------------------------------------
 					//$out_prev = ''; $out_next = '';
 					
 					// catch current post and display previous post details
@@ -92,130 +85,19 @@ class SWP_QueryEntries {
 					
 					// increment
 					$h++;
+					// -------------------------------------------------
+					$checker++; // add value to variable
 
-					// add value to variable
-					$checker++;
+				} 
 
-				}
 
-				// grid
-				if( is_numeric( $show ) ) {
-
-					// set this counter to determine what entry are we
-					// will be the trigger on how many AFTER entries to be displayed
-					$grid_counter++;
-
-					//echo $this->swp_grid_display( $show, $current_post_id, get_the_ID() );
-					
-					// set trigger to stop gathering of previous entries before current post in the loop
-					if( $current_post_id == get_the_ID() ) {
-						$stop_past = 1; // trigger BEFORE and AFTER entries
-						$grid_counter_stop = $grid_counter; // get current counter value
-						//echo 'current: '.get_the_ID().'<br />';
-					}
-
-					if( !$stop_past ) {
-						// harvest entries BEFORE current post in the loop
-						$p_counter++;
-						$past[ $p_counter ] = get_the_ID();
-						//echo count( $past ).' | <a href="'.get_the_permalink( get_the_ID() ).'">'.get_the_ID().'</a><br />';
-					} else {
-						if( $current_post_id != get_the_ID() ) {
-							// harvest entries AFTER current post in the loop
-							$f_counter++;
-							$future[ $f_counter ] = get_the_ID();
-							//echo count( $future ).' | <a href="'.get_the_permalink( get_the_ID() ).'">'.get_the_ID().'</a><br />';
-						}
-					}
-
-					// add value to variable
-					$checker++;
-
-				}
-
-				// get entries via custom field
-				if( $show == 'meta' ) {
-
-					// separate ID checking since if $show is equal to meta, trigger the $checker
-					if( $current_post_id != get_the_ID() ) {
-						
-						$use_this_id = get_the_ID();
-						echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
-
-					}
-
-					// add value to variable
-					$checker++;
-
-				}
-
-				// validate variable, if false, the template calling is archive
+				// validate variable, if false, the calling template is archive
 				if( ! $checker ) {
-
 					// call template
 					echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
-
 				}
 				
 			endwhile;
-
-			$use_this_id = "";
-
-			// Grid - display gathered entries
-			if( is_numeric( $show ) ) {
-
-				// validate current post location in the loop
-				if( $grid_counter_stop == 1 ) {
-					$shower = $show;
-				} else {
-					$shower = $show - 1;
-				}
-
-				// get remaining AFTER current post entries to determine the number of entries BEFORE current post
-				for( $q=1; $q<=$shower; $q++ ) {
-					if( $future[ $q ] ) {
-						$filter_future[] = $future[ $q ];
-					} else {
-						break;
-					}
-				}
-
-				// set loop limit
-				$past_limit = ( ( count($past) - ( $show - count( $filter_future ) ) ) + 1 );
-				
-				// get the BEFORE
-				for( $h=count($past); $h>=$past_limit; $h-- ) {
-					$filter_past[] = $past[ $h ];
-				}
-
-				// handle the display
-				if( is_array( $filter_past ) && is_array( $filter_future ) ) {
-
-					// current post is in the middle of the loop
-					foreach( array_merge( array_reverse( $filter_past ), $filter_future ) as $value ) {
-						$use_this_id = $value;
-						echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
-					}
-
-				} elseif( !is_array( $filter_past ) && is_array( $filter_future ) ) {
-
-					// current post is the first entry of the loop
-					foreach( $filter_future as $value ) {
-						$use_this_id = $value;
-						echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
-					}
-
-				} else {
-
-					// current post is the last entry of the loop
-					foreach( $filter_past as $value ) {
-						$use_this_id = $value;
-						echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
-					}
-
-				}
-
-			}
 /*
 			?>
 			</div>
@@ -345,13 +227,6 @@ class SWP_QueryEntries {
 	private function swp_reset_query() {
 		wp_reset_query();
 		wp_reset_postdata();
-	}
-
-	// Unset Array
-	private function swp_unset_array( $array ) {
-		if( is_array( $array ) ) {
-			unset( $array );
-		}
 	}
 
 }
