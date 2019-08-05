@@ -76,7 +76,7 @@ class SWPTemplateSample {
 			// opening container tag here
 			echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
 			// closing container tag here
-		}
+		//}
 		
 	}
 

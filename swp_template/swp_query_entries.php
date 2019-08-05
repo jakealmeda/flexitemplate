@@ -11,9 +11,9 @@ include_once( 'swp_wp_query.php' );
 class SWP_QueryEntries {
 
 	// DISPLAY TEMPLATE
-	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show ) {
+	public function swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more ) {
 		
-		global $wp_query, $use_this_id;
+		global $wp_query, $use_this_id, $jquery_counter;
 
 		$x = new SWP_WPQueryPosts();
 		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order );
@@ -32,23 +32,27 @@ class SWP_QueryEntries {
 		// validate template directory
 		$template_dir = 'views';
         $this->swp_check_templates( $template_dir );
-
+        
 		// The Loop
 		if ( $wp_query->have_posts() ) {
-/*			
-			?><div id="module-container"><?php
-*/
+
 			$checker = "";
 
 			// unset arrays
 			$this->swp_unset_array( $past );
 			$this->swp_unset_array( $future );
 
+			// opening container tag
+			// ----------------------------------
+			if( $more[ 'tag-open' ] ) {
+				echo $more[ 'tag-open' ];
+			}
+
 			// loop
 			while( $wp_query->have_posts() ): $wp_query->the_post(); //global $post;
 				
 				$use_this_id = ''; // reset variable so as not to affect the next loop
-
+                
 				// navigator (Prev, Next, Both)
 				if( in_array( $show, array( 'previous', 'next', 'both' ) ) ) {
 
@@ -148,7 +152,7 @@ class SWP_QueryEntries {
 					$checker++;
 
 				}
-
+				
 				// validate variable, if false, the template calling is archive
 				if( ! $checker ) {
 
@@ -216,12 +220,18 @@ class SWP_QueryEntries {
 				}
 
 			}
-/*
-			?>
-			</div>
-			<input type="text" id="page_counter" value="1" />
-			<?php
-*/
+
+			// closing container tag
+			// ----------------------------------
+			if( $more[ 'tag-close' ] ) {
+				echo $more[ 'tag-close' ];
+			}
+			/* ----------------------------------
+			 * | the goal for the tag-open and tag-close
+			 * | is so we can segregate the content from
+			 * | the pagination
+			 * ------------------------------- */
+
 			/* PAGINATION
 			 * ---------------------------------------------------------------------------- */
 			if( $pagination_temp == 1 ) {
@@ -243,7 +253,7 @@ class SWP_QueryEntries {
 				) );
 			}
 
-			if( $pagination_temp == 4 ) {
+			/*if( $pagination_temp == 4 ) {
 				echo '<h2>'.$paged.'</h2>';
 	            // Class Reference/WP Query
 	            $pag_args1 = array(
@@ -253,6 +263,25 @@ class SWP_QueryEntries {
 	                'add_args' => array( 'paged2' => $paged2 )
 	            );
 	            echo paginate_links( $pag_args1 );
+			}*/
+
+			if( $pagination_temp == 'ajax' ) {
+
+				// hide this navigation if pages is equal to 1
+				if( $wp_query->max_num_pages > 1 ) {
+
+					echo '<div style="width:100%;" align="right">
+							<input type="text" id="max_posts_'.$more[ 'nav-count' ].'" value="'.$wp_query->max_num_pages.'" style="display:none;" />
+							Navigator #: '.$more[ 'nav-count' ].' |
+							<span id="prev_0_'.$more[ 'nav-count' ].'">Back</span>
+							<a id="prev_'.$more[ 'nav-count' ].'" style="display:none;">Back</a>
+							|
+							<span id="next_0_'.$more[ 'nav-count' ].'" style="display:none;">Next</span>
+							<a id="next_'.$more[ 'nav-count' ].'">Next</a>
+						</div>';
+
+				}
+
 			}
 			/* PAGINATION END
 			 * ---------------------------------------------------------------------------- */
@@ -342,7 +371,7 @@ class SWP_QueryEntries {
 	}
 
 	// RESET QUERIES
-	private function swp_reset_query() {
+	public function swp_reset_query() {
 		wp_reset_query();
 		wp_reset_postdata();
 	}
