@@ -81,12 +81,12 @@ class SWPTemplateSample {
 	}
 
 	// DISPLAY PODCAST GRID TEMPLATE
-	public function swp_podcast_related_function() {
+	/*public function swp_podcast_related_function() {
 
 		// do not edit the next line
 		$b = new SWP_QueryEntries();
 
-		/*
+		/ *
 			// Taxonomy guide
 			// ---------------------------------------------------------------- TAGS
 			$tax_name 		= 'post_tag'; 
@@ -94,7 +94,7 @@ class SWPTemplateSample {
 			// ------------------------------------------------------------ CATEGORY
 			$tax_name 		= 'category';
 			$tax_term		= 'official-video'; // category slug
-		*/
+		* /
 
 		// pagination
 		$paged1 = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
@@ -112,12 +112,18 @@ class SWPTemplateSample {
 
 		// opening container tag here
 		echo '<div class="feature-pretitle">RELATED ITEMS</div>';
-		echo '<div class="grid-feature grid-2col feature-related">';
+		/ *echo '<div class="grid-feature grid-2col feature-related">';
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-		echo '</div>';
+		echo '</div>';* /
+        $more = array(
+						'tag-open'		=> '<div class="grid-feature grid-2col feature-related">', // opening container tag here
+						'tag-close'		=> '</div>', // closing container tag here
+					);
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
+
 		// closing container tag here
 
-	}
+	}*/
 
 	// DISPLAY PODCAST NEXT ITEM
 	public function swp_podcast_next() {
@@ -134,14 +140,14 @@ class SWPTemplateSample {
 		// WHAT TO SHOW
 		$show = "next";
 		
-		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
 		// validate $out if has contents and hide container if empty
 		/*if( $out ) {
     		echo $out;
 		}*/
 	}
 	
-	public function swp_display_all_avail_fields() {
+	/*public function swp_display_all_avail_fields() {
 	    
 	    // overview
 	    
@@ -163,7 +169,7 @@ class SWPTemplateSample {
             ?><div class="item-card3"><?php echo $swp_field; ?></div><?php
         }
 	    
-	}
+	}*/
 
 	// GRID
 	public function swp_podcast_related_function_2() {
@@ -182,15 +188,12 @@ class SWPTemplateSample {
 		$show = "6";
 		$current_post_id 	= get_the_ID();
         
-//		$out = $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-		// validate $out if has contents and hide container if empty
-//		var_dump($out);
-//		if( $out ) {
-    		echo '<div class="feature-pretitle">RELATED ITEMS</div>';
-    		echo '<div class="grid-feature grid-2col feature-related">';
-    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-    		echo '</div>';
-//		}
+    	echo '<div class="feature-pretitle">MORE PODCASTS</div>';
+        $more = array(
+						'tag-open'		=> '<div class="grid-feature grid-2col feature-related">', // opening container tag here
+						'tag-close'		=> '</div>', // closing container tag here
+					);
+		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
 
 	}
 
@@ -220,9 +223,11 @@ class SWPTemplateSample {
                 );
         
     		echo '<div class="feature-pretitle">ORDER BY CUSTOM FIELD</div>';
-    		echo '<div class="grid-feature grid-2col feature-related">';
-    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-    		echo '</div>';
+    		$more = array(
+						'tag-open'		=> '<div class="grid-feature grid-2col feature-related">', // opening container tag here
+						'tag-close'		=> '</div>', // closing container tag here
+					);
+    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
     		
 		}
 
@@ -234,51 +239,56 @@ class SWPTemplateSample {
 		// do not edit the next line
 		$b = new SWP_QueryEntries();
         
-		$template 			= 'media_relationships.php'; // will default to pre-coded sample_template.php if no value is declared
+		$template 			= 'mediaobject-related.php'; // will default to pre-coded sample_template.php if no value is declared
 		$posts_per_page 	= -1; // will default to "Blog pages show at most" if no value is declared | -1 to show all
 		$current_post_id 	= get_the_ID();
+
         
-        // GET TAXONOMY
-        /*$swp_field = get_the_terms( $current_post_id, "relationship" );
-        // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-        // ADD checker if array contains more than 1 entries
-        // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-        if ( $swp_field ) {
-            var_dump( $swp_field );
-            //echo $swp_field[0]->term_id.' | '.$swp_field[0]->name.' | '.$swp_field[0]->slug.'<br />';
-			$tax_name 		= 'relationship';
-			$tax_term		= $swp_field[0]->slug; // category slug
+        $terms = get_the_terms( $current_post_id, 'related_item' );
+        foreach ($terms as $term) {
+        	echo $term->slug.'<br />';
+        }
 
-			//* ##############################
-			//* # POST
-			//* ##############################
-			$post_type 		= 'post';
 
-    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
+        $args = array( 'public'   => true, );
+        foreach ( get_post_types( $args, 'names' ) as $post_type ) {
+			//echo $post_type.'<br />';
+			$args = array(
+				'numberposts' => -1,
+				'post_type'   => $post_type,
+			);
 
-			//* ##############################
-			//* # VIDEO
-			//* ##############################
-			$post_type 		= 'video';
+			$latest_books = get_posts( $args );
+		}
 
-    		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show );
-    		
-		}*/
-		$pod = pods( 'podcast', get_the_ID() );
-		$related = $pod->field( 'relationship_field' );
-		var_dump($related);
-		if ( ! empty( $related ) ) {
-			foreach ( $related as $rel ) { 
-				//get id for related post and put in ID
-				//for advanced content types use $id = $rel[ 'id' ];
-				$id = $rel[ 'ID' ];
-				//show the related post name as link
-				echo '<a href="'.esc_url( get_permalink( $id ) ).'">'.get_the_title( $id ).'</a>';
-				//get the value for some_field in related post and echo it
-				$someField = get_post_meta( $id, 'some_field', true );
-				echo $someField;
-			} //end of foreach
-		} //endif ! empty ( $related )
+        /*$social_types = get_terms( get_object_taxonomies( $post_type )[1] );
+		echo '<input type="text" id="social_types_count" value="'.count($social_types).'" '.$div_args.' />';
+		foreach ( $social_types as $term ) {// echo '<li>' . $term->term_id. ' | '. $term->name. ' | '. $term->slug . '</li>';
+
+			$term_counter++;
+
+			// category slug
+			$tax_term = $term->slug;
+
+			echo '<div class="fontsize-med fontweight-bold archive-description">'.$term->name.'</div>';
+			$more = array(
+						'tag-open'		=> '<div id="term_set_'.$term_counter.'"><div class="grid-third gap-lrg" id="term_set_cont_'.$term_counter.'_1">', // opening container tag here
+						'tag-close'		=> '</div></div>
+											<div '.$div_args.'>
+												<input type="text" id="template_'.$term_counter.'" value="'.$template.'" />
+												<input type="text" id="tax_name_'.$term_counter.'" value="'.$tax_name.'"/>
+												<input type="text" id="tax_term_'.$term_counter.'" value="'.$tax_term.'" />
+												<input type="text" id="ppp_'.$term_counter.'" value="'.$posts_per_page.'" />
+												<input type="text" id="paged_'.$term_counter.'" />
+											</div>', // closing container tag here
+						'nav-count'		=> $term_counter,
+					);
+			echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
+			
+			// reset WP_Query
+			$b->swp_reset_query();
+
+	    }*/
 
 	}
 

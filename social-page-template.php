@@ -81,7 +81,7 @@ class SWPTemplateSample {
 
 			echo '<div class="fontsize-med fontweight-bold archive-description">'.$term->name.'</div>';
 			$more = array(
-						'tag-open'		=> '<div id="term_set_'.$term_counter.'"><div class="grid-third gap-lrg" id="term_set_cont_'.$term_counter.'">', // opening container tag here
+						'tag-open'		=> '<div id="term_set_'.$term_counter.'"><div class="grid-third gap-lrg" id="term_set_cont_'.$term_counter.'_1">', // opening container tag here
 						'tag-close'		=> '</div></div>
 											<div '.$div_args.'>
 												<input type="text" id="template_'.$term_counter.'" value="'.$template.'" />
