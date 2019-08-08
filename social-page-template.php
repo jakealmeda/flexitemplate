@@ -69,8 +69,11 @@ class SWPTemplateSample {
 		$div_args = ' style="display:none;"';
 
 		// Get taxonomies associated with this post type
-		//$social_types = get_terms( get_object_taxonomies( get_post_type() )[1] ); // uncomment if this will be for an CPT archive page
-		$social_types = get_terms( get_object_taxonomies( $post_type )[1] );
+		$social_types = get_terms([
+				'taxonomy' => $tax_name,
+				'hide_empty' => false,
+			]);
+		
 		echo '<input type="text" id="social_types_count" value="'.count($social_types).'" '.$div_args.' />';
 		foreach ( $social_types as $term ) {// echo '<li>' . $term->term_id. ' | '. $term->name. ' | '. $term->slug . '</li>';
 

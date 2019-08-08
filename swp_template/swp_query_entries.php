@@ -176,7 +176,8 @@ class SWP_QueryEntries {
 				}
 
 				// get remaining AFTER current post entries to determine the number of entries BEFORE current post
-				for( $q=1; $q<=$shower; $q++ ) {
+				//for( $q=1; $q<=$shower; $q++ ) {
+				for( $q=1; $q<=$more[ 'related-count' ]; $q++ ) {
 					if( $future[ $q ] ) {
 						$filter_future[] = $future[ $q ];
 					} else {
@@ -188,9 +189,9 @@ class SWP_QueryEntries {
 				$past_limit = ( ( count($past) - ( $show - count( $filter_future ) ) ) + 1 );
 				
 				// get the BEFORE
-				for( $h=count($past); $h>=$past_limit; $h-- ) {
+				/*for( $h=count($past); $h>=$past_limit; $h-- ) {
 					$filter_past[] = $past[ $h ];
-				}
+				}*/
 
 				// handle the display
 				if( is_array( $filter_past ) && is_array( $filter_future ) ) {
@@ -272,7 +273,6 @@ class SWP_QueryEntries {
 
 					echo '<div style="width:100%;" align="right">
 							<input type="text" id="max_posts_'.$more[ 'nav-count' ].'" value="'.$wp_query->max_num_pages.'" style="display:none;" />
-							Navigator #: '.$more[ 'nav-count' ].' |
 							<span id="prev_0_'.$more[ 'nav-count' ].'">Back</span>
 							<a id="prev_'.$more[ 'nav-count' ].'" style="display:none;">Back</a>
 							|
