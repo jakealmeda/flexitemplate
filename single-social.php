@@ -188,14 +188,13 @@ class SWPTemplateSample {
 		//$pagination_count	= 1;
         
 		// WHAT TO SHOW
-		$show = "6";
+		$show = "4";
 		$current_post_id 	= get_the_ID();
         
     	echo '<div class="feature-pretitle">MORE SOCIAL</div>';
         $more = array(
 						'tag-open'		=> '<div class="grid-feature grid-2col feature-related">', // opening container tag here
 						'tag-close'		=> '</div>', // closing container tag here
-						'related-count' => 6,
 					);
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
 
@@ -224,7 +223,6 @@ class SWPTemplateSample {
         $more = array(
 						'tag-open'		=> '<div class="grid-feature grid-2col feature-related">', // opening container tag here
 						'tag-close'		=> '</div>', // closing container tag here
-						'related-count' => 6,
 					);
 		echo $b->swp_load_entries( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $template, $pagination_temp, $pagination_count, $current_post_id, $show, $more );
 

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SWP_WPQueryPosts {
 	
-	public function swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order ) {
+	public function swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $more ) {
 
 		// sort
 		if( is_null( $orderby ) ) {
@@ -43,6 +43,7 @@ class SWP_WPQueryPosts {
 			'meta_key'			=> $orderbymeta,
 			'orderby'			=> $orderby,
 			'order'				=> $order,
+			'offset'            => $more[ 'offset' ],
 		) + ( $condition ? array(
 			'tax_query' 		=> array(
 				array(
@@ -51,8 +52,10 @@ class SWP_WPQueryPosts {
 					'terms'    		=> $tax_term,
 				),
 		)) : array());
-
-		return new WP_Query( $args );
+        $outs = new WP_Query( $args );
+        //var_dump( $outs );
+		return $outs;
+		
 
 	}
 

@@ -16,7 +16,7 @@ class SWP_QueryEntries {
 		global $wp_query, $use_this_id, $jquery_counter;
 
 		$x = new SWP_WPQueryPosts();
-		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order );
+		$wp_query = $x->swp_query_archive_posts( $post_type, $posts_per_page, $tax_name, $tax_term, $paged, $meta_query, $orderbymeta, $orderby, $order, $more );
 		
 		//global $max_page = $wp_query->max_num_pages;
         
@@ -152,6 +152,42 @@ class SWP_QueryEntries {
 					$checker++;
 
 				}
+
+				// hack the loop
+				if( $more[ 'display' ] == 'hackloop' ) {
+
+					// add value to variable
+					// use this variable as a counter of posts as well
+					$checker++;
+
+					// capture entries after skipping the desired jumps
+					if( $paged ) {
+
+						$start_from = $more[ 'skip' ] + ( $more[ 'show_entries' ] * ( $paged - 1 ) );
+
+						$stop_at = $more[ 'skip' ] + ( $more[ 'show_entries' ] * $paged );
+
+						// not page 1
+						if( $checker > $start_from && $checker <= $stop_at ) {
+
+							// call template
+							echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+
+						}
+
+					} else {
+
+						// page 1
+						if( $checker > $more[ 'skip' ] && $checker <= ( $more[ 'show_entries' ] + $more[ 'skip' ] ) ) {
+
+							// call template
+							echo $this->swp_get_local_file_contents( plugin_dir_path( __FILE__ ).$template_dir."/".$temp );
+
+						}	
+					}
+					
+				}
+
 				
 				// validate variable, if false, the template calling is archive
 				if( ! $checker ) {
@@ -177,7 +213,7 @@ class SWP_QueryEntries {
 
 				// get remaining AFTER current post entries to determine the number of entries BEFORE current post
 				//for( $q=1; $q<=$shower; $q++ ) {
-				for( $q=1; $q<=$more[ 'related-count' ]; $q++ ) {
+				for( $q=1; $q<=$show; $q++ ) {
 					if( $future[ $q ] ) {
 						$filter_future[] = $future[ $q ];
 					} else {
@@ -233,6 +269,20 @@ class SWP_QueryEntries {
 			 * | the pagination
 			 * ------------------------------- */
 
+			// option to add the total pages within the loop
+			// jQuery will most likely be the one to pick this up
+			if( $more[ 'max-pages' ] ) {
+				// boolean - true or false
+
+				if( $wp_query->max_num_pages ) {
+					$max_pages = $wp_query->max_num_pages;
+				} else {
+					$max_pages = floor( $wp_query->found_posts / $more[ 'show_entries' ] );
+				}
+				
+				echo '<input type="text" id="imaxnumpages" value="'.$max_pages.'" style="display:none;" />';
+			}
+
 			/* PAGINATION
 			 * ---------------------------------------------------------------------------- */
 			if( $pagination_temp == 1 ) {
@@ -254,17 +304,17 @@ class SWP_QueryEntries {
 				) );
 			}
 
-			/*if( $pagination_temp == 4 ) {
-				echo '<h2>'.$paged.'</h2>';
+			if( $pagination_temp == 4 ) {
+				
 	            // Class Reference/WP Query
 	            $pag_args1 = array(
 	                'format'  => '?paged=%#%',
 	                'current' => $paged,
 	                'total'   => $wp_query->max_num_pages,
-	                'add_args' => array( 'paged2' => $paged2 )
+//	                'add_args' => array( 'paged2' => $paged2 )
 	            );
 	            echo paginate_links( $pag_args1 );
-			}*/
+			}
 
 			if( $pagination_temp == 'ajax' ) {
 
@@ -365,7 +415,7 @@ class SWP_QueryEntries {
 	    
 	}
 
-	// Sample Template filename
+	// SAMPLE TEMPLATE FILENAME
 	public function swp_template_filename () {
 		return 'sample_template.php';
 	}
@@ -376,7 +426,7 @@ class SWP_QueryEntries {
 		wp_reset_postdata();
 	}
 
-	// Unset Array
+	// UNSET ARRAY
 	private function swp_unset_array( $array ) {
 		if( is_array( $array ) ) {
 			unset( $array );
